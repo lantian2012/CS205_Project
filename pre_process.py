@@ -9,6 +9,7 @@ from skimage import io
 from skimage.transform import resize
 import os
 import sys
+import yaml
 
 # INPUT: list of directories, output_shape, clip_limit
 # OUTPUT: Preprocessed Images in directory_processed
@@ -27,17 +28,15 @@ def pre_process(directories, output_shape, clip_limit=0.03):
 				im = exposure.equalize_adapthist(im, clip_limit=clip_limit)
 				io.imsave(out_directory + "/" + filename, im)
 	return True
-	
-# read parameters
-if (len(sys.argv) == 5):
-    directories = list(sys.argv[1].split(","))
-    output_shape_height = int(sys.argv[2])
-    output_shape_width = int(sys.argv[3])
-    clip_limit = float(sys.argv[4])
-else: 
-    sys.exit("Usage : python pre_process.py directories output_shape_height output_shape_width clip_limit \n Example: python pre_process.py \"Data/train001,Data/train002\" 1024 1536 0.05")
 
-# pre process the image
-output_shape = (output_shape_height,output_shape_width)
-pre_process(directories, output_shape, clip_limit)
+def get_pre_process_params(config_file_name)
+	config = open("config/" + config_file_name)
+	config_dict = yaml.safe_read(config)
+	locals().update(config_dict['pre_process'])
+	locals().update(config_dict['pre_process']['adaptive_histogram'])
+	return directories, output_shape, adaptive_histogram, clip_limit 
 
+if __name__ == "__main__":
+	config_file_name = if len(sys.argv) > 1: sys.argv[1] else "default.yaml"
+	directories, output_shape, adaptive_histogram, clip_limit = get_pre_process_params(config_file_name)
+	pre_process(directories, output_shape, adaptive_histogram, clip_limit)
