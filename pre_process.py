@@ -17,7 +17,8 @@ import h5py
 def get_label_dict(label_file):
 	y = {}
 	for line in open(label_file).read().splitlines(): 
-		y[line.split()[0]] = line.split()[1]
+		if len(line.split()) >  1:
+			y[line.split()[0]] = line.split()[1]
 	return y
 
 def pre_process(y_dict, train_directories, test_directories, output_shape, adaptive_histogram, clip_limit=0.03):
@@ -54,16 +55,18 @@ def get_config_dict(config_file_name):
 
 if __name__ == "__main__":
 	config_file_name = sys.argv[1] if len(sys.argv) > 1 else "default.yaml"
-	get_config_dict = get_pre_process_params(config_file_name)
+	config_dict = get_config_dict(config_file_name)
 	y_dict = get_label_dict(config_dict['label_file'])
 	X_train, y_train, X_test, y_test = pre_process(y_dict, 
-								   config_dict['train_directories'],
-								   config_dict['test_directories'],
-								   config_dict['output_shape'], 
-								   config_dict['adaptive_histogram']['adaptive_histogram']
-								   float(config_dict['adaptive_histogram']['clip_limit'])
-
-	with h5py.File(filename, 'w') as f:
+						       config_dict['train_directories'],
+				                       config_dict['test_directories'],
+				                       config_dict['output_shape'], 
+						       config_dict['adaptive_histogram']['adaptive_histogram'],
+						       float(config_dict['adaptive_histogram']['clip_limit']))
+	h5py_dir = config_dict['h5py_directory']
+	if not os.path.exists(h5py_dir):
+    		os.makedirs(h5py_dir)
+	with h5py.File(h5py_dir + '/' + 'data.hdf5', 'w') as f:
         	f.create_dataset('X_train', data=X_train)
         	f.create_dataset('y_train', data=y_train)
         	f.create_dataset('X_test',  data=X_test)
