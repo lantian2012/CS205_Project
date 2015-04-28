@@ -22,10 +22,10 @@ def get_label_dict(label_file):
 			y[line.split(',')[0]] = line.split(',')[1]
 	return y
 
-def pre_process(y_dict, train_directories, val_directories, test_directories, output_shape, adaptive_histogram, clip_limit=0.03):
+def pre_process(y_dict, train_directories, valid_directories, test_directories, output_shape, adaptive_histogram, clip_limit=0.03):
 	X_train = []; y_train = [];
 	X_test = []; y_test = [];
-	X_val = []; y_val = [];
+	X_valid = []; y_valid = [];
 
 	for train_directory in train_directories:
 		for filename in os.listdir(train_directory):
@@ -38,16 +38,16 @@ def pre_process(y_dict, train_directories, val_directories, test_directories, ou
 				X_train.append(im.flatten())
 				y_train.append(y_dict[filename.split(".jpeg")[0]])				
 	
-	for val_directory in val_directories:
-		for filename in os.listdir(val_directory):
+	for valid_directory in valid_directories:
+		for filename in os.listdir(valid_directory):
 			if filename.endswith(".jpeg"):
-				im = io.imread(val_directory + "/" + filename)
+				im = io.imread(valid_directory + "/" + filename)
 				im = rgb2gray(im)
 				im = resize(im, output_shape) 
 				if adaptive_histogram:
 					im = exposure.equalize_adapthist(im, clip_limit=clip_limit)
-				X_val.append(im.flatten())
-				y_val.append(y_dict[filename.split(".jpeg")[0]])
+				X_valid.append(im.flatten())
+				y_valid.append(y_dict[filename.split(".jpeg")[0]])
 	
 	for test_directory in test_directories:
 		for filename in os.listdir(test_directory):
@@ -59,7 +59,7 @@ def pre_process(y_dict, train_directories, val_directories, test_directories, ou
 					im = exposure.equalize_adapthist(im, clip_limit=clip_limit)
 				X_test.append(im.flatten())
 				y_test.append(y_dict[filename.split(".jpeg")[0]])				
-	return X_train, y_train, X_val, y_val, X_test, y_test
+	return X_train, y_train, X_valid, y_valid, X_test, y_test
 
 def get_config_dict(config_file_name):
 	config = open("config/" + config_file_name)
@@ -70,9 +70,9 @@ if __name__ == "__main__":
 	config_file_name = sys.argv[1] if len(sys.argv) > 1 else "default.yaml"
 	config_dict = get_config_dict(config_file_name)
 	y_dict = get_label_dict(config_dict['label_file'])
-	X_train, y_train, X_val, y_val, X_test, y_test = pre_process(y_dict, 
+	X_train, y_train, X_valid, y_valid, X_test, y_test = pre_process(y_dict, 
 						       config_dict['train_directories'],
-						       config_dict['val_directories'],
+						       config_dict['valid_directories'],
 		                       config_dict['test_directories'],
 		                       config_dict['output_shape'], 
 						       config_dict['adaptive_histogram']['adaptive_histogram'],
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 	with h5py.File(hdf5_dir + '/' + 'data.hdf5', 'w') as f:
         	f.create_dataset('X_train', data=X_train)
         	f.create_dataset('y_train', data=y_train)
-        	f.create_dataset('X_val', data=X_val)
-        	f.create_dataset('y_val', data=y_val)
+        	f.create_dataset('X_valid', data=X_valid)
+        	f.create_dataset('y_valid', data=y_valid)
         	f.create_dataset('X_test',  data=X_test)
         	f.create_dataset('y_test',  data=y_test)
