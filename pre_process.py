@@ -64,10 +64,10 @@ if __name__ == "__main__":
 				                       config_dict['output_shape'], 
 						       config_dict['adaptive_histogram']['adaptive_histogram'],
 						       float(config_dict['adaptive_histogram']['clip_limit']))
-	h5py_dir = config_dict['hdf5_directory']
-	if not os.path.exists(h5py_dir):
-    		os.makedirs(h5py_dir)
-	with h5py.File(h5py_dir + '/' + 'data.hdf5', 'w') as f:
+	hdf5_dir = config_dict['hdf5_directory']
+	if not os.path.exists(hdf5_dir):
+    		os.makedirs(hdf5_dir)
+	with h5py.File(hdf5_dir + '/' + 'data.hdf5', 'w') as f:
         	f.create_dataset('X_train', data=X_train)
         	f.create_dataset('y_train', data=y_train)
         	f.create_dataset('X_test',  data=X_test)
