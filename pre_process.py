@@ -34,7 +34,7 @@ def pre_process(y_dict, train_directories, test_directories, output_shape, adapt
 				im = resize(im, output_shape) 
 				if adaptive_histogram:
 					im = exposure.equalize_adapthist(im, clip_limit=clip_limit)
-				X_train.append(im)
+				X_train.append(im.flatten())
 				y_train.append(y_dict[filename.split(".jpeg")[0]])				
 	
 	for test_directory in test_directories:
@@ -45,7 +45,7 @@ def pre_process(y_dict, train_directories, test_directories, output_shape, adapt
 				im = resize(im, output_shape) 
 				if adaptive_histogram:
 					im = exposure.equalize_adapthist(im, clip_limit=clip_limit)
-				X_test.append(im)
+				X_test.append(im.flatten())
 				y_test.append(y_dict[filename.split(".jpeg")[0]])				
 	return X_train, y_train, X_test, y_test
 
