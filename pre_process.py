@@ -17,8 +17,9 @@ import h5py
 def get_label_dict(label_file):
 	y = {}
 	for line in open(label_file).read().splitlines(): 
-		if len(line.split()) >  1:
-			y[line.split()[0]] = line.split()[1]
+		print line.split(',')
+		if len(line.split(',')) >  1:
+			y[line.split(',')[0]] = line.split(',')[1]
 	return y
 
 def pre_process(y_dict, train_directories, test_directories, output_shape, adaptive_histogram, clip_limit=0.03):
