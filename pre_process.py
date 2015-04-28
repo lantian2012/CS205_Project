@@ -14,10 +14,13 @@ import h5py
 
 # INPUT: list of directories, output_shape, clip_limit
 # OUTPUT: Preprocessed Images in directory_processed
-def get_label_dict(file_name):
-	
+def get_label_dict(label_file):
+	y = {}
+	for line in open(label_file).read().splitlines(): 
+		y[line.split()[0]] = line.split()[1]
+	return y
 
-def pre_process(directories, output_shape, adaptive_histogram, clip_limit=0.03, save_pre_processed=False):
+def pre_process(y_dict, directories, output_shape, adaptive_histogram, clip_limit=0.03, save_pre_processed=False):
 	X = []; y = []
 	for directory in directories:
 		out_directory = directory + "_processed"		
@@ -34,8 +37,8 @@ def pre_process(directories, output_shape, adaptive_histogram, clip_limit=0.03, 
 				if save_pre_processed:
 					io.imsave(out_directory + "/" + filename, im)
 				X.append(im)
-				
-	return True
+				y.append(y_dict[filename.split(".jpeg")[0]])				
+	return X, y
 
 def get_pre_process_params(config_file_name):
 	config = open("config/" + config_file_name)
@@ -53,4 +56,8 @@ if __name__ == "__main__":
 	directories, label_file, output_shape, adaptive_histogram, clip_limit, save_pre_processed = get_pre_process_params(config_file_name)
 	#print directories, output_shape, adaptive_histogram, clip_limit
 	y_dict = get_label_dict(label_file)
-	X = pre_process(directories, output_shape, adaptive_histogram, clip_limit, save_pre_processed)
+	X, y = pre_process(y_dict, directories, output_shape, adaptive_histogram, clip_limit, save_pre_processed)
+	with h5py.File(filename, 'w') as f:
+        	f.create_dataset('X_train', data=dataset.get_design_matrix())
+        	f.create_dataset('y_train', data=dataset.get_targets())
+
