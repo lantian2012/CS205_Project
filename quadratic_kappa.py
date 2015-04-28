@@ -6,8 +6,7 @@ from theano import tensor
 
 
 def quadratic_kappa_cost(e_a, e_b):
-
-	e_a, e_b = e_a.eval(), e_b.eval()
+	# e_a, e_b = e_a.eval(), e_b.eval()
 	N = 5
 	O = np.zeros((N, N), dtype=np.float)
 	w = np.zeros((N, N))
