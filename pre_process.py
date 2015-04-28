@@ -63,7 +63,7 @@ if __name__ == "__main__":
 				                       config_dict['output_shape'], 
 						       config_dict['adaptive_histogram']['adaptive_histogram'],
 						       float(config_dict['adaptive_histogram']['clip_limit']))
-	h5py_dir = config_dict['h5py_directory']
+	h5py_dir = config_dict['hdf5_directory']
 	if not os.path.exists(h5py_dir):
     		os.makedirs(h5py_dir)
 	with h5py.File(h5py_dir + '/' + 'data.hdf5', 'w') as f:
