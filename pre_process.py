@@ -20,44 +20,51 @@ def get_label_dict(label_file):
 		y[line.split()[0]] = line.split()[1]
 	return y
 
-def pre_process(y_dict, directories, output_shape, adaptive_histogram, clip_limit=0.03, save_pre_processed=False):
-	X = []; y = []
-	for directory in directories:
-		out_directory = directory + "_processed"		
-		if save_pre_processed not os.path.exists(out_directory):
-			os.makedirs(out_directory)
-    				
-		for filename in os.listdir(directory):
+def pre_process(y_dict, train_directories, test_directories, output_shape, adaptive_histogram, clip_limit=0.03):
+	X_train = []; y_train = [];
+	X_test = []; y_test = [];
+
+	for train_directory in train_directories:
+		for filename in os.listdir(train_directory):
 			if filename.endswith(".jpeg"):
-				im = io.imread(directory + "/" + filename)
+				im = io.imread(train_directory + "/" + filename)
 				im = rgb2gray(im)
 				im = resize(im, output_shape) 
 				if adaptive_histogram:
 					im = exposure.equalize_adapthist(im, clip_limit=clip_limit)
-				if save_pre_processed:
-					io.imsave(out_directory + "/" + filename, im)
-				X.append(im)
-				y.append(y_dict[filename.split(".jpeg")[0]])				
-	return X, y
+				X_train.append(im)
+				y_train.append(y_dict[filename.split(".jpeg")[0]])				
+	
+	for test_directory in test_directories:
+		for filename in os.listdir(test_directory):
+			if filename.endswith(".jpeg"):
+				im = io.imread(test_directory + "/" + filename)
+				im = rgb2gray(im)
+				im = resize(im, output_shape) 
+				if adaptive_histogram:
+					im = exposure.equalize_adapthist(im, clip_limit=clip_limit)
+				X_test.append(im)
+				y_test.append(y_dict[filename.split(".jpeg")[0]])				
+	return X_train, y_train, X_test, y_test
 
-def get_pre_process_params(config_file_name):
+def get_config_dict(config_file_name):
 	config = open("config/" + config_file_name)
 	config_dict = yaml.safe_load(config)['pre_process']
-	return config_dict['directories'],
-	       config_dict['label_file'],
-	       map(int, config_dict['output_shape']), 
-	       config_dict['adaptive_histogram']['adaptive_histogram'], 
-               float(config_dict['adaptive_histogram']['clip_limit']),
-               config_dict['save_pre_processed']
-
+	return config_dict
 
 if __name__ == "__main__":
 	config_file_name = sys.argv[1] if len(sys.argv) > 1 else "default.yaml"
-	directories, label_file, output_shape, adaptive_histogram, clip_limit, save_pre_processed = get_pre_process_params(config_file_name)
-	#print directories, output_shape, adaptive_histogram, clip_limit
-	y_dict = get_label_dict(label_file)
-	X, y = pre_process(y_dict, directories, output_shape, adaptive_histogram, clip_limit, save_pre_processed)
-	with h5py.File(filename, 'w') as f:
-        	f.create_dataset('X_train', data=dataset.get_design_matrix())
-        	f.create_dataset('y_train', data=dataset.get_targets())
+	get_config_dict = get_pre_process_params(config_file_name)
+	y_dict = get_label_dict(config_dict['label_file'])
+	X_train, y_train, X_test, y_test = pre_process(y_dict, 
+								   config_dict['train_directories'],
+								   config_dict['test_directories'],
+								   config_dict['output_shape'], 
+								   config_dict['adaptive_histogram']['adaptive_histogram']
+								   float(config_dict['adaptive_histogram']['clip_limit'])
 
+	with h5py.File(filename, 'w') as f:
+        	f.create_dataset('X_train', data=X_train)
+        	f.create_dataset('y_train', data=y_train)
+        	f.create_dataset('X_test',  data=X_test)
+        	f.create_dataset('y_test',  data=y_test)
