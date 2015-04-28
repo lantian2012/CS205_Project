@@ -2,6 +2,6 @@ pre_process:
   output_shape: [1024, 1536]
   adaptive_histogram:
     adaptive_histogram: True
-    clip_limit: 0.05
+    clip_limit: 0.03
   gray_scale: True
   directories: ["Data/sample"]

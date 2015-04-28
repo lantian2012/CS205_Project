@@ -1,8 +1,8 @@
 !obj:pylearn2.train.Train {
-    dataset: &train !obj:pylearn2.datasets.mnist.MNIST {
-        which_set: 'train',
-        start: 0,
-        stop: %(train_stop)i
+    dataset: &train !obj:pylearn2.datasets.hdf5.HDF5Dataset {
+        filename: %(filename)s,
+        X: X,
+        y: y,
     },
     model: !obj:pylearn2.models.mlp.MLP {
         batch_size: %(batch_size)i,

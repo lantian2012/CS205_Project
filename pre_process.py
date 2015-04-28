@@ -39,5 +39,5 @@ def get_pre_process_params(config_file_name):
 if __name__ == "__main__":
 	config_file_name = sys.argv[1] if len(sys.argv) > 1 else "default.yaml"
 	directories, output_shape, adaptive_histogram, clip_limit = get_pre_process_params(config_file_name)
-	print directories, output_shape, adaptive_histogram, clip_limit
+	#print directories, output_shape, adaptive_histogram, clip_limit
 	pre_process(directories, output_shape, adaptive_histogram, clip_limit)

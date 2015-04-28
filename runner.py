@@ -6,7 +6,8 @@ train_params = {'train_stop': 50000,
                     'output_channels_h2': 64, 
                     'output_channels_h3': 64,  
                     'max_epochs': 500,
-                    'save_path': '.'}
+                    'save_path': '.',
+		    'filename': 'Data/data.hdf5'}
 train = train % (train_params)
 print train
 from pylearn2.config import yaml_parse
