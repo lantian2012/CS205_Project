@@ -5,12 +5,11 @@ from collections import Counter
 from theano import tensor
 
 def quadratic_kappa_cost(e_a, e_b):
-	e_a, e_b = e_a.eval(), e_b.eval()
 	N = 5
 	O = np.zeros((N, N), dtype=np.float)
 	w = np.zeros((N, N))
-	for i, j in zip(e_a, e_b):
-	     O[i, j] += 1
+	for i in e_a.shape[0]:
+	     O[e_a[i], e_b[i]] += 1
 	O = np.array(O / np.sum(O), np.float)
 	for i in range(0, N):
 	    for j in range(0, N):
