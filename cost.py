@@ -35,6 +35,6 @@ class QuadraticKappaCost(DefaultDataSpecsMixin, Cost):
         space.validate(data)
 
         inputs, targets = data
-        outputs = model.logistic_regression(inputs)
-        loss = quadratic_kappa_cost(outputs, targets)
+        y_hat = model.fprop(inputs)
+        loss = quadratic_kappa_cost(y_hat, targets)
         return loss.mean()
