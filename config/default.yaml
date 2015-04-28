@@ -5,3 +5,5 @@ pre_process:
     clip_limit: 0.05
   gray_scale: True
   directories: ["Data/train001", "Data/train002"]
+  label_file: "Data/trainLabels.csv"
+  save_pre_process: False

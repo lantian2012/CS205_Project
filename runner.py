@@ -1,3 +1,6 @@
+import pre_process
+import h5py
+
 train = open('config/conv.yaml', 'r').read()
 train_params = {'train_stop': 50000,
                     'valid_stop': 60000,
