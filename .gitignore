@@ -1,3 +1,4 @@
 Data/*
 *.pyc
 .idea/*
+*.pkl

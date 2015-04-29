@@ -44,8 +44,8 @@
             {
                 'valid' : !obj:pylearn2.datasets.hdf5.HDF5Dataset {
                             filename: %(filename)s,
-                            X: X_train,
-                            y: y_train,
+                            X: X_valid,
+                            y: y_valid,
                         },
                 'test'  : !obj:pylearn2.datasets.hdf5.HDF5Dataset {
                             filename: %(filename)s,

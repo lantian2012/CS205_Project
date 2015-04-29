@@ -6,7 +6,7 @@ pre_process:
   gray_scale: True
   train_directories: ["Data/sample_train"]
   test_directories: ["Data/sample_test"]
-  valid_directories: ["Data/valid001"]
+  valid_directories: ["Data/sample_valid"]
   label_file: "Data/trainLabels.csv"
   save_pre_process: False
   hdf5_directory: "Data/hdf5"
