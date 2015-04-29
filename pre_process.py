@@ -11,12 +11,13 @@ import os
 import sys
 import yaml
 import h5py
+from sklearn.preprocessing import label_binarize
 
 # INPUT: list of directories, output_shape, clip_limit
 # OUTPUT: Preprocessed Images in directory_processed
 def get_label_dict(label_file):
 	y = {}
-	for line in open(label_file).read().splitlines(): 
+	for line in open(label_file).read().splitlines():
 		#print line.split(',')
 		if len(line.split(',')) >  1:
 			y[line.split(',')[0]] = line.split(',')[1]
@@ -31,22 +32,26 @@ def pre_process(y_dict, train_directories, test_directories, output_shape, adapt
 			if filename.endswith(".jpeg"):
 				im = io.imread(train_directory + "/" + filename)
 				im = rgb2gray(im)
-				im = resize(im, output_shape) 
+				im = resize(im, output_shape)
 				if adaptive_histogram:
 					im = exposure.equalize_adapthist(im, clip_limit=clip_limit)
 				X_train.append(im.flatten())
-				y_train.append(y_dict[filename.split(".jpeg")[0]])				
-	
+				y_train.append(y_dict[filename.split(".jpeg")[0]])
+
 	for test_directory in test_directories:
 		for filename in os.listdir(test_directory):
 			if filename.endswith(".jpeg"):
 				im = io.imread(test_directory + "/" + filename)
 				im = rgb2gray(im)
-				im = resize(im, output_shape) 
+				im = resize(im, output_shape)
 				if adaptive_histogram:
 					im = exposure.equalize_adapthist(im, clip_limit=clip_limit)
 				X_test.append(im.flatten())
-				y_test.append(y_dict[filename.split(".jpeg")[0]])				
+				y_test.append(y_dict[filename.split(".jpeg")[0]])
+
+    	y_train = label_binarize(y_train, classes=[0,1,2,3,4])
+    	y_test = label_binarize(y_test, classes=[0,1,2,3,4])
+
 	return X_train, y_train, X_test, y_test
 
 def get_config_dict(config_file_name):
@@ -58,10 +63,10 @@ if __name__ == "__main__":
 	config_file_name = sys.argv[1] if len(sys.argv) > 1 else "default.yaml"
 	config_dict = get_config_dict(config_file_name)
 	y_dict = get_label_dict(config_dict['label_file'])
-	X_train, y_train, X_test, y_test = pre_process(y_dict, 
+	X_train, y_train, X_test, y_test = pre_process(y_dict,
 						       config_dict['train_directories'],
 				                       config_dict['test_directories'],
-				                       config_dict['output_shape'], 
+				                       config_dict['output_shape'],
 						       config_dict['adaptive_histogram']['adaptive_histogram'],
 						       float(config_dict['adaptive_histogram']['clip_limit']))
 	hdf5_dir = config_dict['hdf5_directory']
