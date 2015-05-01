@@ -2,8 +2,9 @@ import h5py
 import numpy as np
 import sys
 from prl_preprocess import get_config_dict
+import os
 
-count = int(sys.argv[1])
+
 config_dict = get_config_dict("default.yaml")
 hdf5_dir = config_dict['hdf5_directory']
 traincount = 0
@@ -11,15 +12,20 @@ validcount = 0
 testcount = 0
 width = 0
 
+filenames = []
+for filename in os.listdir(hdf5_dir):
+	if filename.endswith(".npz"):
+		filenames.append(filename)
 
-
-for i in xrange(count):
-	tempdata = np.load(hdf5_dir + '/' + 'data' + str(i) + '.npz')
+print 'Start Accessing Files'
+for filename in filenames:
+	tempdata = np.load(hdf5_dir + '/' + filename)
 	trainshape = tempdata['X_train'].shape
 	traincount += trainshape[0]
 	width = trainshape[1]
 	validcount += tempdata['X_valid'].shape[0]
 	testcount += tempdata['X_test'].shape[0]
+print 'Accessing Files Ended'
 
 with h5py.File(hdf5_dir + '/' + 'data.hdf5', 'w') as f:
 	X_train = f.create_dataset("X_train", (traincount, width), compression="gzip")
@@ -31,8 +37,9 @@ with h5py.File(hdf5_dir + '/' + 'data.hdf5', 'w') as f:
 	trainpos = 0
 	validpos = 0
 	testpos = 0
-	for i in xrange(count):
-		tempdata = np.load(hdf5_dir + '/' + 'data' + str(i) + '.npz')
+	for filename in filenames:
+		print 'Start Procesing File: ', filename
+		tempdata = np.load(hdf5_dir + '/' + filename)
 		temptrain = tempdata['X_train']
 		tempytrain = tempdata['y_train']
 		tempvalid= tempdata['X_valid']

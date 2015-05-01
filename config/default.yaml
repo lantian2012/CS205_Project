@@ -4,7 +4,7 @@ pre_process:
     adaptive_histogram: True
     clip_limit: 0.05
   gray_scale: True
-  train_directories: ["Data/train001", "Data/train002"]
+  train_directories: ["Data/train001"]
   test_directories: ["Data/test001"]
   valid_directories: ["Data/valid001"]
   label_file: "Data/trainLabels.csv"
