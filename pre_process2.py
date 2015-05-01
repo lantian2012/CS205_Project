@@ -12,6 +12,7 @@ import sys
 import yaml
 import h5py
 from sklearn.preprocessing import label_binarize
+import numpy as np
 
 # INPUT: list of directories, output_shape, clip_limit
 # OUTPUT: Preprocessed Images in directory_processed
@@ -63,7 +64,6 @@ def pre_process(y_dict, train_directories, valid_directories, test_directories, 
 
 	y_train = label_binarize(y_train, classes=[0,1,2,3,4])
 	y_test = label_binarize(y_test, classes=[0,1,2,3,4])
-	y_valid = label_binarize(y_valid, classes=[0,1,2,3,4])
 	return X_train, y_train, X_valid, y_valid, X_test, y_test
 
 def get_config_dict(config_file_name):
@@ -86,10 +86,6 @@ if __name__ == "__main__":
 	hdf5_dir = config_dict['hdf5_directory']
 	if not os.path.exists(hdf5_dir):
     		os.makedirs(hdf5_dir)
-	with h5py.File(hdf5_dir + '/' + 'data.hdf5', 'w') as f:
-        	f.create_dataset('X_train', data=X_train)
-        	f.create_dataset('y_train', data=y_train)
-        	f.create_dataset('X_valid', data=X_valid)
-        	f.create_dataset('y_valid', data=y_valid)
-        	f.create_dataset('X_test',  data=X_test)
-        	f.create_dataset('y_test',  data=y_test)
+	np.savez('Data/npy/data.npz', X_train=np.array(X_train), y_train=np.array(y_train),
+				      X_valid=np.array(X_valid), y_valid=np.array(y_valid),
+				      X_test=np.array(X_test), y_test=np.array(y_test))
