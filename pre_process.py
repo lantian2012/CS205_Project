@@ -89,8 +89,8 @@ if __name__ == "__main__":
 
 	with h5py.File(hdf5_dir + '/' + 'data.hdf5', 'w') as f:
         	f.create_dataset('X_train', data=X_train)
-        	f.create_dataset('y_train', data=y_train_one)
+        	f.create_dataset('y_train', data=y_train)
         	f.create_dataset('X_valid', data=X_valid)
-        	f.create_dataset('y_valid', data=y_valid_one)
+        	f.create_dataset('y_valid', data=y_valid)
         	f.create_dataset('X_test',  data=X_test)
-        	f.create_dataset('y_test',  data=y_test_one)
+        	f.create_dataset('y_test',  data=y_test)
