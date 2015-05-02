@@ -48,7 +48,7 @@ def pre_process(y_dict, train_directories, valid_directories, test_directories, 
 			if adaptive_histogram:
 				im = exposure.equalize_adapthist(im, clip_limit=clip_limit)
 			X_train.append(im.flatten())
-			y_train.append(y_dict[filename.split(".jpeg")[0]])				
+			y_train.append(y_dict[filename.split(".jpeg")[0]])
 	
 	for valid_directory in valid_directories:
 
