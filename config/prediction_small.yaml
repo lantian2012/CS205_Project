@@ -2,6 +2,6 @@ post_process:
   image_height: 1024
   image_width: 1536
   model_path: "convolutional_network_best.pkl"
-  data_path: "Data/hdf5/small_data.hdf5"
-  output_path: "Data/y_small_pred.pkl"
+  data_path: "Data/hdf5/data.hdf5"
+  output_path: "Data/y_pred_small.pkl"
   

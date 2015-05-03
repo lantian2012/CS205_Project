@@ -2,3 +2,5 @@ Data/*
 *.pyc
 .idea/*
 *.pkl
+.ipynb_checkpoints
+.ipynb_checkpoints/*

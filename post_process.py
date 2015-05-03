@@ -36,7 +36,7 @@ def prediction(model_path, dataset_path, image_height, image_width, output_path)
 	print "loading testing data..."
 	start = time.time()
 	h5f = h5py.File(dataset_path,'r')
-	X_test = h5f['X_test'][:]
+	X_test = np.array(h5f['X_test'][:],dtype=np.float32)
 	h5f.close()
 	stop = time.time()
 	print "testing data loaded. time spent: ", (stop - start), "s"

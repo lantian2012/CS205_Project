@@ -79,15 +79,16 @@ if __name__ == "__main__":
 	X_train, y_train, X_valid, y_valid, X_test, y_test = pre_process(y_dict, 
 						       config_dict['train_directories'],
 						       config_dict['valid_directories'],
-		                       config_dict['test_directories'],
-		                       config_dict['output_shape'], 
+		              			       config_dict['test_directories'],
+		                                       config_dict['output_shape'], 
 						       config_dict['adaptive_histogram']['adaptive_histogram'],
 						       float(config_dict['adaptive_histogram']['clip_limit']))
-	hdf5_dir = config_dict['hdf5_directory']
+	hdf5_file = config_dict['hdf5_file']
+	hdf5_dir = hdf5_file[:hdf5_file.rindex("/")+1]
 	if not os.path.exists(hdf5_dir):
     		os.makedirs(hdf5_dir)
 
-	with h5py.File(hdf5_dir + '/' + 'data.hdf5', 'w') as f:
+	with h5py.File(hdf5_file, 'w') as f:
         	f.create_dataset('X_train', data=X_train)
         	f.create_dataset('y_train', data=y_train)
         	f.create_dataset('X_valid', data=X_valid)

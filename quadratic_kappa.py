@@ -10,10 +10,10 @@ def quadratic_kappa_cost(e_a, e_b):
 	N = 5
 	O = np.zeros((N, N), dtype=np.float)
 	w = np.zeros((N, N))
-	#for i, j in zip(e_a, e_b):
-	#     O[i, j] += 1
-	for i in tensor.arange(e_a.shape[0]):
-		O[e_a[i], e_b[i]] += 1
+	for i, j in zip(e_a, e_b):
+	     O[i, j] += 1
+	#for i in tensor.arange(e_a.shape[0]):
+	#	O[e_a[i], e_b[i]] += 1
 	O = np.array(O / np.sum(O), np.float)
 	for i in range(0, N):
 	    for j in range(0, N):
