@@ -1,5 +1,5 @@
 !obj:pylearn2.train.Train {
-    dataset: &train !obj:pylearn2.datasets.npy_npz.NpzDataset {
+    dataset: &train !obj:pylearn2.datasets.hdf5.HDF5Dataset {
         filename: %(filename)s,
         X: X_train,
         y: y_train,
@@ -7,7 +7,7 @@
     model: !obj:pylearn2.models.mlp.MLP {
         batch_size: %(batch_size)i,
         input_space: !obj:pylearn2.space.Conv2DSpace {
-            shape: [1024, 1536],
+            shape: [254, 384],
             num_channels: 1
         },
         layers: [ !obj:pylearn2.models.mlp.ConvRectifiedLinear {
@@ -42,12 +42,12 @@
         },
         monitoring_dataset:
             {
-                'valid' : !obj:pylearn2.datasets.npy_npz.NpzDataset {
+                'valid' : !obj:pylearn2.datasets.hdf5.HDF5Dataset {
                             filename: %(filename)s,
                             X: X_valid,
                             y: y_valid,
                         },
-                'test'  : !obj:pylearn2.datasets.npy_npz.NpzDataset {
+                'test'  : !obj:pylearn2.datasets.hdf5.HDF5Dataset {
                             filename: %(filename)s,
                             X: X_test,
                             y: y_test,

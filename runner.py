@@ -1,7 +1,9 @@
 import pre_process
 import h5py
 import pylearn2
-train = open('config/conv.yaml', 'r').read()
+import sys
+conv_yaml = "config/" + sys.argv[1] if len(sys.argv) > 1 else "config/conv.yaml"
+train = open(conv_yaml, 'r').read()
 # train_params = {'train_stop': 50000,
 #                     'valid_stop': 60000,
 #                     'test_stop': 10000,
