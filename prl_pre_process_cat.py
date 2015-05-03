@@ -6,7 +6,8 @@ import os
 
 
 config_dict = get_config_dict("default.yaml")
-hdf5_dir = config_dict['hdf5_directory']
+hdf5_file = config_dict['hdf5_file']
+hdf5_dir = hdf5_file[:hdf5_file.rindex("/")+1]
 traincount = 0
 validcount = 0
 testcount = 0
@@ -27,7 +28,7 @@ for filename in filenames:
 	testcount += tempdata['X_test'].shape[0]
 print 'Accessing Files Ended'
 
-with h5py.File(hdf5_dir + '/' + 'data.hdf5', 'w') as f:
+with h5py.File(hdf5_file, 'w') as f:
 	X_train = f.create_dataset("X_train", (traincount, width), compression="gzip")
 	X_valid = f.create_dataset("X_valid", (validcount, width), compression="gzip")
 	X_test = f.create_dataset("X_test", (testcount, width), compression="gzip")

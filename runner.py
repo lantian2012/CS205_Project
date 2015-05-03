@@ -1,6 +1,7 @@
-import pre_process
 import h5py
 import pylearn2
+import theano
+train = open('config/conv.yaml', 'r').read()
 import sys
 import yaml
 
@@ -23,11 +24,12 @@ train_params = {'batch_size': 1,
                 'output_channels_h2': 64, 
                 'output_channels_h3': 64,  
                 'max_epochs': 25,
-                'save_path': '.',
+                'save_path': 'Data/result',
 		'filename': hdf5_file}
 
 train = train % (train_params)
 print train
+print theano.config.device
 from pylearn2.config import yaml_parse
 train = yaml_parse.load(train)
 train.main_loop()
