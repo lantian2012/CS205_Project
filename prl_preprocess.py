@@ -119,7 +119,8 @@ if __name__ == "__main__":
 						       config_dict['adaptive_histogram']['adaptive_histogram'],
 						       jobid, arraysize, 
 						       float(config_dict['adaptive_histogram']['clip_limit']))
-	hdf5_dir = config_dict['hdf5_directory']
+	hdf5_file = config_dict['hdf5_file']
+	hdf5_dir = hdf5_file[:hdf5_file.rindex("/")+1]
 	if not os.path.exists(hdf5_dir):
     		os.makedirs(hdf5_dir)
 
