@@ -9,4 +9,4 @@ pre_process:
   valid_directories: ["Data/valid001"]
   label_file: "Data/trainLabels.csv"
   save_pre_process: False
-  hdf5_directory: "Data/hdf5"
+  hdf5_file: "Data/hdf5/data.hdf5"
