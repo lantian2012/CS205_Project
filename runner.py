@@ -2,7 +2,12 @@ import pre_process
 import h5py
 import pylearn2
 import sys
+import yaml
+
 conv_yaml = "config/" + sys.argv[1] if len(sys.argv) > 1 else "config/conv.yaml"
+config_yaml = "config/" + sys.argv[2] if len(sys.argv) > 2 else "config/default.yaml"
+hdf5_file = yaml.safe_load(open(config_yaml))['pre_process']['hdf5_file']
+
 train = open(conv_yaml, 'r').read()
 # train_params = {'train_stop': 50000,
 #                     'valid_stop': 60000,
@@ -19,7 +24,7 @@ train_params = {'batch_size': 1,
                 'output_channels_h3': 64,  
                 'max_epochs': 25,
                 'save_path': '.',
-		'filename': 'Data/hdf5/data.hdf5'}
+		'filename': hdf5_file}
 
 train = train % (train_params)
 print train
