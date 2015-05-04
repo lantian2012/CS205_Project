@@ -24,6 +24,7 @@ train_params = {'batch_size': 1,
                 'output_channels_h3': 64,  
                 'max_epochs': 25,
                 'save_path': 'Data/result',
+                'save_start': 10,
 		'filename': hdf5_file}
 
 train = train % (train_params)

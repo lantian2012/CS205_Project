@@ -42,16 +42,17 @@
         },
         monitoring_dataset:
             {
+                'train' : *train,
                 'valid' : !obj:pylearn2.datasets.hdf5.HDF5Dataset {
                             filename: %(filename)s,
                             X: X_valid,
                             y: y_valid,
                         },
-                'test'  : !obj:pylearn2.datasets.hdf5.HDF5Dataset {
-                            filename: %(filename)s,
-                            X: X_test,
-                            y: y_test,
-                        },
+                # 'test'  : !obj:pylearn2.datasets.hdf5.HDF5Dataset {
+                #             filename: %(filename)s,
+                #             X: X_test,
+                #             y: y_test,
+                #         },
             },
         cost: !obj:pylearn2.costs.cost.SumOfCosts { costs: [
             !obj:pylearn2.costs.cost.MethodCost {
@@ -80,7 +81,7 @@
              channel_name: 'valid_y_misclass',
              save_path: "%(save_path)s/convolutional_network_best.pkl"
         }, !obj:pylearn2.training_algorithms.learning_rule.MomentumAdjustor {
-            start: 1,
+            start: %(save_start)i,
             saturate: 10,
             final_momentum: .99
         }
