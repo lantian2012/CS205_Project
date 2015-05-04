@@ -85,6 +85,7 @@ def pre_process(y_dict, train_directories, valid_directories, test_directories, 
 			end = len(filenames)
 
 		for filename in filenames[start:end]:
+			print test_directory + "/" + filename
 			im = io.imread(test_directory + "/" + filename)
 			im = rgb2gray(im)
 			im = resize(im, output_shape) 

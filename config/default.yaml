@@ -4,9 +4,9 @@ pre_process:
     adaptive_histogram: True
     clip_limit: 0.05
   gray_scale: True
-  train_directories: ["Data/train001"]
-  test_directories: ["Data/test001"]
-  valid_directories: ["Data/valid001"]
+  train_directories: ["Data/balanced_train1"]
+  test_directories: ["Data/balanced_test1"]
+  valid_directories: ["Data/balanced_valid1"]
   label_file: "Data/trainLabels.csv"
   save_pre_process: False
-  hdf5_file: "Data/hdf5/data.hdf5"
+  hdf5_file: "Data/hdf5/data_default.hdf5"

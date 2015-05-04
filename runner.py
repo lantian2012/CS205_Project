@@ -4,8 +4,9 @@ import theano
 import sys
 import yaml
 
-config_yaml = "config/" + sys.argv[1] if len(sys.argv) > 1 else "config/default.yaml"
-conv_yaml = "config/" + sys.argv[2] if len(sys.argv) > 2 else "config/conv.yaml"
+job_id = sys.argv[1] if len(sys.argv) > 1 else "0"
+config_yaml = "config/" + sys.argv[2] if len(sys.argv) > 2 else "config/default.yaml"
+conv_yaml = "config/" + sys.argv[3] if len(sys.argv) > 3 else "config/conv.yaml"
 hdf5_file = yaml.safe_load(open(config_yaml))['pre_process']['hdf5_file']
 
 train = open(conv_yaml, 'r').read()
@@ -19,11 +20,11 @@ train = open(conv_yaml, 'r').read()
 #                     'save_path': '.',
 # 		    'filename': 'Data/data.hdf5'}
 
-train_params = {'batch_size': 1,
-                'output_channels_h2': 64, 
-                'output_channels_h3': 64,  
-                'max_epochs': 25,
+train_params = {'batch_size': 5,
+                'max_epochs': 70,
                 'save_path': 'Data/result',
+                'job_id': job_id,
+                'save_start': 4,
 		'filename': hdf5_file}
 
 train = train % (train_params)

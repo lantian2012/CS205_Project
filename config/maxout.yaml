@@ -12,27 +12,25 @@
         },
         layers: [!obj:pylearn2.models.maxout.MaxoutConvC01B {
                      layer_name: 'h2',
-                     pad: 0,
-                     num_channels: 48,
-                     output_channels: %(output_channels_h2)i,
-                     num_pieces: 2,
+                     num_channels: 64,
+                     num_pieces: 4,
                      kernel_shape: [5, 5],
                      pool_shape: [4, 4],
                      pool_stride: [2, 2],
                      irange: .05,
-                     max_kernel_norm: 1.9365,
+                     max_kernel_norm: 1.9365
                  },
-
-
-                 !obj:pylearn2.models.mlp.ConvRectifiedLinear {
+                 !obj:pylearn2.models.maxout.MaxoutConvC01B {
                      layer_name: 'h3',
-                     output_channels: %(output_channels_h3)i,
+                     num_channels: 64,
+                     num_pieces: 4,
                      irange: .05,
                      kernel_shape: [5, 5],
                      pool_shape: [4, 4],
                      pool_stride: [2, 2],
                      max_kernel_norm: 1.9365
-                 }, !obj:pylearn2.models.mlp.Softmax {
+                 }, 
+                 !obj:pylearn2.models.mlp.Softmax {
                      max_col_norm: 1.9365,
                      layer_name: 'y',
                      n_classes: 5,
