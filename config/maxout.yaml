@@ -12,8 +12,8 @@
         },
         layers: [!obj:pylearn2.models.maxout.MaxoutConvC01B {
                      layer_name: 'h2',
-                     num_channels: 64,
-                     num_pieces: 4,
+                     num_channels: 8,
+                     num_pieces: 8,
                      kernel_shape: [5, 5],
                      pool_shape: [4, 4],
                      pool_stride: [2, 2],
@@ -22,8 +22,8 @@
                  },
                  !obj:pylearn2.models.maxout.MaxoutConvC01B {
                      layer_name: 'h3',
-                     num_channels: 64,
-                     num_pieces: 4,
+                     num_channels: 8,
+                     num_pieces: 8,
                      irange: .05,
                      kernel_shape: [5, 5],
                      pool_shape: [4, 4],
