@@ -9,6 +9,7 @@ config_yaml = "config/" + sys.argv[2] if len(sys.argv) > 2 else "config/default.
 conv_yaml = "config/" + sys.argv[3] if len(sys.argv) > 3 else "config/conv.yaml"
 hdf5_file = yaml.safe_load(open(config_yaml))['pre_process']['hdf5_file']
 
+
 train = open(conv_yaml, 'r').read()
 # train_params = {'train_stop': 50000,
 #                     'valid_stop': 60000,
