@@ -1,10 +1,8 @@
 !obj:pylearn2.train.Train {
     dataset: &train !obj:pylearn2.datasets.csv_dataset.CSVDataset {
-        path: %(filename)s,
+        path: "Data/hdf5/train.csv",
         task: "classification",
         expect_headers: False,
-        X: X_train,
-        y: y_train,
     },
     model: !obj:pylearn2.models.mlp.MLP {
         batch_size: %(batch_size)i,
@@ -45,10 +43,10 @@
         monitoring_dataset:
             {
                 'train' : *train,
-                'valid' : !obj:pylearn2.datasets.hdf5.HDF5Dataset {
-                            filename: %(filename)s,
-                            X: X_valid,
-                            y: y_valid,
+                'valid' : !obj:pylearn2.datasets.csv_dataset.CSVDataset {
+                            path: "Data/hdf5/valid.csv",
+                            task: "classification",
+                            expect_headers: False,
                         },
                 # 'test'  : !obj:pylearn2.datasets.hdf5.HDF5Dataset {
                 #             filename: %(filename)s,
