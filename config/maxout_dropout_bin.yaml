@@ -28,6 +28,7 @@
                      max_kernel_norm: 1.9365
                  }, !obj:pylearn2.models.maxout.Maxout {
                     layer_name: 'h4',
+                    irange: .005,
                     num_units: 8,
                     num_pieces: 8,
                     max_col_norm: 1.9
