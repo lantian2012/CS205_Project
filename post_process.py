@@ -44,7 +44,10 @@ def prediction(model_path, dataset_path, image_height, image_width, output_path)
 	print "predicting testing data..."
 	X_test = np.reshape(X_test, (X_test.shape[0], image_height, image_width, 1))
 	start = time.time()
-	y_pred = f(X_test)
+        y_pred = list()
+        for i in range(X_test.shape[0] / 50):
+          y_pred.append(f(X_test[50*i:50*(i+1)]))
+        y_pred = np.array(y_pred).flatten()
 	stop = time.time()
 	print "prediction finished. time spent: ", (stop - start), "s"
 	

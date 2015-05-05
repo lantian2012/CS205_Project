@@ -3,4 +3,5 @@ Data/*
 .idea/*
 *.pkl
 .ipynb_checkpoints
+run_scripts/*
 .ipynb_checkpoints/*
