@@ -32,21 +32,21 @@ def prediction(model_path, dataset_path, image_height, image_width, output_path)
 	Y = T.argmax(Y, axis = 1) 
 	f = function([X], Y) 
 
-	# load testing data
-	print "loading testing data..."
+	# load training data
+	print "loading training data..."
 	start = time.time()
 	h5f = h5py.File(dataset_path,'r')
-	X_test = np.array(h5f['X_test'][:],dtype=np.float32)
+	X_train = np.array(h5f['X_train'][:],dtype=np.float32)
 	h5f.close()
 	stop = time.time()
-	print "testing data loaded. time spent: ", (stop - start), "s"
+	print "traning data loaded. time spent: ", (stop - start), "s"
 
-	print "predicting testing data..."
-	X_test = np.reshape(X_test, (X_test.shape[0], image_height, image_width, 1))
+	print "predicting training data..."
+	X_train = np.reshape(X_train, (X_train.shape[0], image_height, image_width, 1))
 	start = time.time()
         y_pred = list()
-        for i in range(X_test.shape[0] / 50):
-        	y_pred.append(f(X_test[50*i:50*(i+1)]))	
+        for i in range(2):
+        	y_pred.append(f(X_train[50*i:50*(i+1)]))	
         	print 'Processed Batch: ', i
         y_pred = np.array(y_pred).flatten()
 	stop = time.time()
