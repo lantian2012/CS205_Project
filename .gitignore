@@ -5,3 +5,5 @@ Data/*
 .ipynb_checkpoints
 run_scripts/*
 .ipynb_checkpoints/*
+*.err
+*.out
