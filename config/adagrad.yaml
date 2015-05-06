@@ -53,7 +53,7 @@
     algorithm: !obj:pylearn2.training_algorithms.sgd.SGD {
         batch_size: %(batch_size)i,
         learning_rate: .01,
-        learning_rule: !obj:pylearn2.training_algorithms.learning_rule.AdaGrad {}
+        learning_rule: !obj:pylearn2.training_algorithms.learning_rule.AdaGrad {},
         monitoring_dataset:
             {
                 'train' : *train,
