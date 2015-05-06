@@ -12,7 +12,7 @@
         },
         layers: [ !obj:pylearn2.models.mlp.ConvRectifiedLinear {
                      layer_name: 'h2',
-                     output_channels: 64,
+                     output_channels: 256,
                      irange: .05,
                      kernel_shape: [5, 5],
                      pool_shape: [4, 4],
@@ -20,7 +20,7 @@
                      max_kernel_norm: 1.9365
                  }, !obj:pylearn2.models.mlp.ConvRectifiedLinear {
                      layer_name: 'h3',
-                     output_channels: 64,
+                     output_channels: 256,
                      irange: .05,
                      kernel_shape: [5, 5],
                      pool_shape: [4, 4],
@@ -28,7 +28,7 @@
                      max_kernel_norm: 1.9365
                  }, !obj:pylearn2.models.mlp.ConvRectifiedLinear {
                      layer_name: 'h4',
-                     output_channels: 64,
+                     output_channels: 256,
                      irange: .05,
                      kernel_shape: [5, 5],
                      pool_shape: [4, 4],
@@ -36,7 +36,7 @@
                      max_kernel_norm: 1.9365
                  }, !obj:pylearn2.models.mlp.ConvRectifiedLinear {
                      layer_name: 'h5',
-                     output_channels: 64,
+                     output_channels: 256,
                      irange: .05,
                      kernel_shape: [5, 5],
                      pool_shape: [4, 4],
@@ -81,11 +81,11 @@
         #cost: !obj:cost.QuadraticKappaCost {},
         termination_criterion: !obj:pylearn2.termination_criteria.And {
             criteria: [
-                !obj:pylearn2.termination_criteria.MonitorBased {
-                    channel_name: "valid_y_misclass",
-                    prop_decrease: 0.50,
-                    N: 10
-                },
+                #!obj:pylearn2.termination_criteria.MonitorBased {
+                #    channel_name: "valid_y_misclass",
+                #    prop_decrease: 0.50,
+                #    N: 10
+                #},
                 !obj:pylearn2.termination_criteria.EpochCounter {
                     max_epochs: %(max_epochs)i
                 },

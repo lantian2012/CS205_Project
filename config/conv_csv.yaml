@@ -1,8 +1,8 @@
 !obj:pylearn2.train.Train {
-    dataset: &train !obj:pylearn2.datasets.hdf5.HDF5Dataset {
-        filename: %(filename)s,
-        X: X_train,
-        y: y_train,
+    dataset: &train !obj:pylearn2.datasets.csv_dataset.CSVDataset {
+        path: "Data/hdf5/train.csv",
+        task: "classification",
+        expect_headers: False,
     },
     model: !obj:pylearn2.models.mlp.MLP {
         batch_size: %(batch_size)i,
@@ -26,14 +26,7 @@
                      pool_shape: [4, 4],
                      pool_stride: [2, 2],
                      max_kernel_norm: 1.9365
-                 }, !obj:pylearn2.models.maxout.Maxout {
-                    layer_name: 'h4',
-                    irange: .005,
-                    num_units: 8,
-                    num_pieces: 8,
-                    max_col_norm: 1.9
-                 }, 
-                 !obj:pylearn2.models.mlp.Softmax {
+                 }, !obj:pylearn2.models.mlp.Softmax {
                      max_col_norm: 1.9365,
                      layer_name: 'y',
                      n_classes: 5,
@@ -50,10 +43,10 @@
         monitoring_dataset:
             {
                 'train' : *train,
-                'valid' : !obj:pylearn2.datasets.hdf5.HDF5Dataset {
-                            filename: %(filename)s,
-                            X: X_valid,
-                            y: y_valid,
+                'valid' : !obj:pylearn2.datasets.csv_dataset.CSVDataset {
+                            path: "Data/hdf5/valid.csv",
+                            task: "classification",
+                            expect_headers: False,
                         },
                 # 'test'  : !obj:pylearn2.datasets.hdf5.HDF5Dataset {
                 #             filename: %(filename)s,
@@ -65,7 +58,7 @@
             !obj:pylearn2.costs.cost.MethodCost {
                 method: 'cost_from_X'
             }, !obj:pylearn2.costs.mlp.WeightDecay {
-                coeffs: [ .00005, .00005, .00005, .00005 ]
+                coeffs: [ .00005, .00005, .00005 ]
             }
             ]
         },
