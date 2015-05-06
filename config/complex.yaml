@@ -10,45 +10,59 @@
             shape: [254, 384],
             num_channels: 1
         },
-        layers: [ !obj:pylearn2.models.mlp.ConvRectifiedLinear {
-                     layer_name: 'h1',
-                     output_channels: 64,
-                     irange: .05,
+        layers: [ !obj:pylearn2.models.maxout.MaxoutConvC01B {
+                     layer_name: 'h0',
+                     pad: 4,
+                     tied_b: 1,
+                     W_lr_scale: .05,
+                     b_lr_scale: .05,
+                     num_channels: 48,
+                     num_pieces: 2,
                      kernel_shape: [8, 8],
-                     pool_shape: [3, 3],
+                     pool_shape: [4, 4],
                      pool_stride: [2, 2],
-                     #max_kernel_norm: 1.9365
-                 }, 
-                 !obj:pylearn2.models.maxout.Maxout {
-                    layer_name: 'h2',
-                    irange: .005,
-                    num_units: 8,
-                    num_pieces: 8,
-                    max_col_norm: 1.9
-                 }, 
-                 !obj:pylearn2.models.mlp.ConvRectifiedLinear {
-                     layer_name: 'h3',
-                     output_channels: 64,
-                     irange: .05,
-                     kernel_shape: [3, 3],
-                     pool_shape: [3, 3],
+                     irange: .005,
+                     max_kernel_norm: .9,
+                 }, !obj:pylearn2.models.maxout.MaxoutConvC01B {
+                     layer_name: 'h1',
+                     pad: 3,
+                     tied_b: 1,
+                     W_lr_scale: .05,
+                     b_lr_scale: .05,
+                     num_channels: 128,
+                     num_pieces: 2,
+                     kernel_shape: [8, 8],
+                     pool_shape: [4, 4],
                      pool_stride: [2, 2],
-                     #max_kernel_norm: 1.9365
-                 },
-                 !obj:pylearn2.models.maxout.Maxout {
-                    layer_name: 'h4',
+                     irange: .005,
+                     max_kernel_norm: 1.9365,
+                 }, !obj:pylearn2.models.maxout.MaxoutConvC01B {
+                     pad: 3,
+                     layer_name: 'h2',
+                     tied_b: 1,
+                     W_lr_scale: .05,
+                     b_lr_scale: .05,
+                     num_channels: 128,
+                     num_pieces: 2,
+                     kernel_shape: [5, 5],
+                     pool_shape: [2, 2],
+                     pool_stride: [2, 2],
+                     irange: .005,
+                     max_kernel_norm: 1.9365,
+                 }, !obj:pylearn2.models.maxout.Maxout {
+                    layer_name: 'h3',
                     irange: .005,
-                    num_units: 8,
-                    num_pieces: 8,
+                    num_units: 240,
+                    num_pieces: 5,
                     max_col_norm: 1.9
-                 }, 
-                 !obj:pylearn2.models.mlp.Softmax {
+                 }, !obj:pylearn2.models.mlp.Softmax {
                      max_col_norm: 1.9365,
                      layer_name: 'y',
-                     n_classes: 1,
-                     istdev: .05
+                     n_classes: 15,
+                     irange: .005
                  }
                 ],
+    },
     algorithm: !obj:pylearn2.training_algorithms.sgd.SGD {
         batch_size: %(batch_size)i,
         learning_rate: .01,
