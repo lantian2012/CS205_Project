@@ -24,17 +24,70 @@ References:
 import os
 import sys
 import time
-
+import h5py
 import numpy
-
+import numpy as np
 import theano
 import theano.tensor as T
 from theano.tensor.signal import downsample
 from theano.tensor.nnet import conv
 
-from logistic_sgd import LogisticRegression, load_data
+from logistic_sgd import LogisticRegression#, load_data
 from mlp import HiddenLayer
 
+def load_data(hdf5_file):
+    ''' Loads the dataset
+    '''
+
+    #############
+    # LOAD DATA #
+    #############
+
+    print '... loading data'
+
+    # Load the dataset
+    hdf5 = h5py.File(hdf5_file,'r')
+    train_set_x = hdf5['X_train'][:]
+    test_set_x = hdf5['X_test'][:]
+    valid_set_x = hdf5['X_valid'][:]
+    train_set_y =np.array([np.where(enc == 1) for enc in  hdf5['y_train'][:]]).flatten() 
+    test_set_y = np.array([np.where(enc == 1) for enc in  hdf5['y_test'][:]]).flatten()
+    valid_set_y = np.array([np.where(enc == 1) for enc in  hdf5['y_valid'][:]]).flatten()
+    
+    #train_set, valid_set format: tuple(input, target)
+    #input is an numpy.ndarray of 2 dimensions (a matrix)
+    #witch row's correspond to an example. target is a
+    #numpy.ndarray of 1 dimensions (vector)) that have the same length as
+    #the number of rows in the input. It should give the target
+    #target to the example with the same index in the input.
+
+    def shared_dataset(data_x, data_y, borrow=True):
+        """ Function that loads the dataset into shared variables
+
+        The reason we store our dataset in shared variables is to allow
+        Theano to copy it into the GPU memory (when code is run on GPU).
+        Since copying data into the GPU is slow, copying a minibatch everytime
+        is needed (the default behaviour if the data is not in a shared
+        variable) would lead to a large decrease in performance.
+        """
+        shared_x = theano.shared(numpy.asarray(data_x, dtype=theano.config.floatX), borrow=borrow)
+        shared_y = theano.shared(numpy.asarray(data_y, dtype=theano.config.floatX), borrow=borrow)
+        # When storing data on the GPU it has to be stored as floats
+        # therefore we will store the labels as ``floatX`` as well
+        # (``shared_y`` does exactly that). But during our computations
+        # we need them as ints (we use labels as index, and if they are
+        # floats it doesn't make sense) therefore instead of returning
+        # ``shared_y`` we will have to cast it to int. This little hack
+        # lets ous get around this issue
+        return shared_x, T.cast(shared_y, 'int32')
+
+    valid_set_x, valid_set_y = shared_dataset(valid_set_x, valid_set_y)
+    train_set_x, train_set_y = shared_dataset(train_set_x, train_set_y)
+    test_set_x, test_set_y = shared_dataset(test_set_x, test_set_y)
+
+    rval = [(train_set_x, train_set_y), (valid_set_x, valid_set_y),
+            (test_set_x, test_set_y)]
+    return rval
 
 class LeNetConvPoolLayer(object):
     """Pool Layer of a convolutional network """
@@ -132,8 +185,8 @@ def evaluate_lenet5(learning_rate=0.1, n_epochs=200,
 
     rng = numpy.random.RandomState(23455)
 
-    datasets = load_data(dataset)
-
+    datasets = load_data("Data/hdf5/data_binary.hdf5")
+    ishape = [254, 384]
     train_set_x, train_set_y = datasets[0]
     valid_set_x, valid_set_y = datasets[1]
     test_set_x, test_set_y = datasets[2]
@@ -162,7 +215,7 @@ def evaluate_lenet5(learning_rate=0.1, n_epochs=200,
     # Reshape matrix of rasterized images of shape (batch_size, 28 * 28)
     # to a 4D tensor, compatible with our LeNetConvPoolLayer
     # (28, 28) is the size of MNIST images.
-    layer0_input = x.reshape((batch_size, 1, 28, 28))
+    layer0_input = x.reshape((batch_size, 1, ishape[0], ishape[1]))
 
     # Construct the first convolutional pooling layer:
     # filtering reduces the image size to (28-5+1 , 28-5+1) = (24, 24)
@@ -171,7 +224,7 @@ def evaluate_lenet5(learning_rate=0.1, n_epochs=200,
     layer0 = LeNetConvPoolLayer(
         rng,
         input=layer0_input,
-        image_shape=(batch_size, 1, 28, 28),
+        image_shape=(batch_size, 1, ishape[0], ishape[1]),
         filter_shape=(nkerns[0], 1, 5, 5),
         poolsize=(2, 2)
     )
@@ -204,7 +257,7 @@ def evaluate_lenet5(learning_rate=0.1, n_epochs=200,
     )
 
     # classify the values of the fully-connected sigmoidal layer
-    layer3 = LogisticRegression(input=layer2.output, n_in=500, n_out=10)
+    layer3 = LogisticRegression(input=layer2.output, n_in=500, n_out=2)
 
     # the cost we minimize during training is the NLL of the model
     cost = layer3.negative_log_likelihood(y)
