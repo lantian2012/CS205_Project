@@ -105,6 +105,8 @@ class LogisticRegression(object):
         # probability is maximal
         self.y_pred = T.argmax(self.p_y_given_x, axis=1)
         # end-snippet-1
+        
+        print self.y_pred
 
         # parameters of the model
         self.params = [self.W, self.b]
