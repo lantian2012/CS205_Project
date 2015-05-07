@@ -147,10 +147,3 @@ if __name__ == "__main__":
 		X_train = X_train, y_train = y_train_one, X_valid = X_valid, 
 		y_valid = y_valid_one, X_test = X_test, y_test = y_test_one)
 
-	# with h5py.File(hdf5_dir + '/' + 'data' + str(jobid) + '.hdf5', 'w') as f:
- #        	f.create_dataset('X_train', data=X_train)
- #        	f.create_dataset('y_train', data=y_train_one)
- #        	f.create_dataset('X_valid', data=X_valid)
- #        	f.create_dataset('y_valid', data=y_valid_one)
- #        	f.create_dataset('X_test',  data=X_test)
- #        	f.create_dataset('y_test',  data=y_test_one)
