@@ -1,0 +1,91 @@
+!obj:pylearn2.train.Train {
+    dataset: &train !obj:pylearn2.datasets.hdf5.HDF5Dataset {
+        filename: %(filename)s,
+        X: X_train,
+        y: y_train,
+    },
+    model: !obj:pylearn2.models.mlp.MLP {
+        batch_size: %(batch_size)i,
+        input_space: !obj:pylearn2.space.Conv2DSpace {
+            shape: [254, 384],
+            num_channels: 1
+        },
+        layers: [ !obj:pylearn2.models.mlp.ConvRectifiedLinear {
+                     layer_name: 'h2',
+                     output_channels: 100,
+                     irange: .05,
+                     kernel_shape: [5, 5],
+                     pool_shape: [4, 4],
+                     pool_stride: [2, 2],
+                     max_kernel_norm: 1.9365
+                 }, !obj:pylearn2.models.mlp.ConvRectifiedLinear {
+                     layer_name: 'h3',
+                     output_channels: 100,
+                     irange: .05,
+                     kernel_shape: [5, 5],
+                     pool_shape: [4, 4],
+                     pool_stride: [2, 2],
+                     max_kernel_norm: 1.9365
+                 }, !obj:pylearn2.models.mlp.Softmax {
+                     max_col_norm: 1.9365,
+                     layer_name: 'y',
+                     n_classes: 2,
+                     istdev: .05
+                 }
+                ],
+    },
+    algorithm: !obj:pylearn2.training_algorithms.sgd.SGD {
+        batch_size: %(batch_size)i,
+        learning_rate: .01,
+        learning_rule: !obj:pylearn2.training_algorithms.learning_rule.Momentum {
+            init_momentum: .5
+        },
+        monitoring_dataset:
+            {
+                'train' : *train,
+                'valid' : !obj:pylearn2.datasets.hdf5.HDF5Dataset {
+                            filename: %(filename)s,
+                            X: X_valid,
+                            y: y_valid,
+                        },
+                # 'test'  : !obj:pylearn2.datasets.hdf5.HDF5Dataset {
+                #             filename: %(filename)s,
+                #             X: X_test,
+                #             y: y_test,
+                #         },
+            },
+        cost: !obj:pylearn2.costs.cost.SumOfCosts { costs: [
+            !obj:pylearn2.costs.cost.MethodCost {
+                method: 'cost_from_X'
+            }, !obj:pylearn2.costs.mlp.WeightDecay {
+                coeffs: [ .00005, .00005, .00005 ]
+            }
+            ]
+        },
+        #cost: !obj:cost.QuadraticKappaCost {},
+        termination_criterion: !obj:pylearn2.termination_criteria.And {
+            criteria: [
+                # !obj:pylearn2.termination_criteria.MonitorBased {
+                #     channel_name: "valid_y_misclass",
+                #     prop_decrease: 0.50,
+                #     N: 10
+                # },
+                !obj:pylearn2.termination_criteria.EpochCounter {
+                    max_epochs: %(max_epochs)i
+                },
+            ]
+        },
+    },
+    extensions:
+        [ !obj:pylearn2.train_extensions.best_params.MonitorBasedSaveBest {
+             channel_name: 'valid_y_misclass',
+             save_path: "%(save_path)s/convolutional_network_best_%(job_id)s.pkl",
+             start_epoch:  %(save_start)i,
+        }, !obj:pylearn2.training_algorithms.learning_rule.MomentumAdjustor {
+            start: 1, 
+            saturate: 10,
+            final_momentum: .99
+        }
+    ]
+}
+

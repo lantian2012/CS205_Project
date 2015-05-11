@@ -14,11 +14,17 @@
                      layer_name: 'h1',
                      output_channels: 64,
                      irange: .05,
-                     kernel_shape: [10, 10],
+                     kernel_shape: [20, 20],
+                     pool_shape: [4, 4],
+                     pool_stride: [2, 2],
+                 },!obj:pylearn2.models.mlp.ConvRectifiedLinear {
+                     layer_name: 'h2',
+                     output_channels: 96,
+                     irange: .05,
+                     kernel_shape: [5, 5],
                      pool_shape: [4, 4],
                      pool_stride: [2, 2],
                  }, !obj:pylearn2.models.mlp.Softmax {
-                     max_col_norm: 1.9365,
                      layer_name: 'y',
                      n_classes: 2,
                      istdev: .05
@@ -27,7 +33,7 @@
     },
     algorithm: !obj:pylearn2.training_algorithms.sgd.SGD {
         batch_size: 25,
-        learning_rate: 1e-3,
+        learning_rate: 1e-6,
         learning_rule: !obj:pylearn2.training_algorithms.learning_rule.RMSProp {
         },
         monitoring_dataset:
@@ -43,7 +49,7 @@
             !obj:pylearn2.costs.cost.MethodCost {
                 method: 'cost_from_X'
             }, !obj:pylearn2.costs.mlp.WeightDecay {
-                coeffs: [ .00005, .00005]
+                coeffs: [ .00005, .00005, .00005]
             }
             ]
         },

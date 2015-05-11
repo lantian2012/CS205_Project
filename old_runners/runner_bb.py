@@ -21,7 +21,8 @@ train = open(conv_yaml, 'r').read()
 #                     'save_path': '.',
 # 		    'filename': 'Data/data.hdf5'}
 
-train_params = {'max_epochs': 30,
+train_params = {'batch_size': 25,
+                'max_epochs': 70,
                 'save_path': '.',
                 'job_id': job_id,
                 'save_start': 4,

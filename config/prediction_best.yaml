@@ -1,0 +1,7 @@
+post_process:
+  image_height: 254
+  image_width: 384
+  model_path: "convolutional_network_best_39948893.pkl"
+  data_path: "Data/hdf5/data_binary_balanced.hdf5"
+  output_path: "y_pred_best.pkl"
+  

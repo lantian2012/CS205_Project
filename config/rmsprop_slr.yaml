@@ -14,7 +14,7 @@
                      layer_name: 'h1',
                      output_channels: 64,
                      irange: .05,
-                     kernel_shape: [10, 10],
+                     kernel_shape: [20, 20],
                      pool_shape: [4, 4],
                      pool_stride: [2, 2],
                  }, !obj:pylearn2.models.mlp.Softmax {
@@ -27,7 +27,7 @@
     },
     algorithm: !obj:pylearn2.training_algorithms.sgd.SGD {
         batch_size: 25,
-        learning_rate: 1e-3,
+        learning_rate: 1e-4,
         learning_rule: !obj:pylearn2.training_algorithms.learning_rule.RMSProp {
         },
         monitoring_dataset:

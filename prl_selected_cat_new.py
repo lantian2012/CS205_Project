@@ -10,7 +10,7 @@ def get_config_dict(config_file_name):
 	config_dict = yaml.safe_load(config)['pre_process']
 	return config_dict
 
-config_file_name = sys.argv[1] if len(sys.argv) > 1 else "binary_new.yaml"
+config_file_name = sys.argv[1] if len(sys.argv) > 1 else "binary_new_new.yaml"
 config_dict = get_config_dict(config_file_name)
 hdf5_file = config_dict['hdf5_file']
 hdf5_dir = hdf5_file[:hdf5_file.rindex("/")+1]

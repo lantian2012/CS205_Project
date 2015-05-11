@@ -1,0 +1,7 @@
+post_process:
+  image_height: 254
+  image_width: 384
+  model_path: "Data/result/convolutional_network_best_4layer.pkl"
+  data_path: "Data/hdf5/data_binary.hdf5"
+  output_path: "Data/y_pred_4layer.pkl"
+  
