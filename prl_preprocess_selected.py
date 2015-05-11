@@ -54,7 +54,7 @@ def pre_process(y_dict, train_directories, images, output_shape, adaptive_histog
 	return X, y
 
 def get_config_dict(config_file_name):
-	config = open("config/" + config_file_name)
+	config = open(config_file_name)
 	config_dict = yaml.safe_load(config)['pre_process']
 	return config_dict
 
@@ -82,14 +82,11 @@ if __name__ == "__main__":
 		jobid, arraysize, 
 		float(config_dict['adaptive_histogram']['clip_limit']))
 	hdf5_file = config_dict['hdf5_file']
-	hdf5_dir = hdf5_file[:hdf5_file.rindex("/")+1]
-	if not os.path.exists(hdf5_dir):
-    		os.makedirs(hdf5_dir)
-
+	hdf5_dir = "."
 
 	y_one = preprocessing.OneHotEncoder(n_values=5)
 	y_one = y_one.fit_transform(np.reshape(y, (len(y), 1))).toarray()
 
-	np.savez_compressed(hdf5_dir + '/' + 'data_new' + str(jobid) + '.npz', 
+	np.savez_compressed(hdf5_dir + '/' + 'data_new_new_' + str(jobid) + '.npz', 
 		X=X, y=y_one)
 

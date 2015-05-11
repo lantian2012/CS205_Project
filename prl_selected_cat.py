@@ -6,14 +6,14 @@ import os
 import yaml
 
 def get_config_dict(config_file_name):
-	config = open('config/'+config_file_name)
+	config = open(config_file_name)
 	config_dict = yaml.safe_load(config)['pre_process']
 	return config_dict
 
 config_file_name = sys.argv[1] if len(sys.argv) > 1 else "binary_new.yaml"
 config_dict = get_config_dict(config_file_name)
 hdf5_file = config_dict['hdf5_file']
-hdf5_dir = hdf5_file[:hdf5_file.rindex("/")+1]
+hdf5_dir = '.'
 
 width = 0
 traincount = 0
@@ -22,7 +22,7 @@ datacount = 0
 
 filenames = []
 for filename in os.listdir(hdf5_dir):
-	if filename.endswith(".npz") and filename.startswith("data_new"):
+	if filename.endswith(".npz") and filename.startswith("data_new_new"):
 		filenames.append(filename)
 
 print 'Start Accessing Files'
