@@ -28,10 +28,13 @@ def get_label_dict(label_file):
 
 def pre_process(y_dict, train_directories, images, output_shape, adaptive_histogram, jobid, arraysize, clip_limit=0.03):
 	
+	# Store preprocessed images
 	X = []
 	y = []
 
+	
 	for train_directory in train_directories:
+		# Get valid training images
 		filenames = []
 		for filename in os.listdir(train_directory):
 			if filename.endswith(".jpeg") and filename.split('.')[0] in images:
@@ -42,6 +45,7 @@ def pre_process(y_dict, train_directories, images, output_shape, adaptive_histog
 		if jobid+1 == arraysize:
 			end = len(filenames)
 
+		# preprocess each image
 		for filename in filenames[start:end]:
 			im = io.imread(train_directory + "/" + filename)
 			im = rgb2gray(im)
@@ -68,8 +72,7 @@ if __name__ == "__main__":
 	jobid = int(sys.argv[1])
 	arraysize = int(sys.argv[2])
 
-	
-
+	# read configuration files
 	config_dict = get_config_dict(config_file_name)
 	y_dict = get_label_dict(config_dict['label_file'])
 	images = pd.read_pickle(config_dict['image'])
@@ -84,6 +87,7 @@ if __name__ == "__main__":
 	hdf5_file = config_dict['hdf5_file']
 	hdf5_dir = "."
 
+	# One hot encoding for pylearn
 	y_one = preprocessing.OneHotEncoder(n_values=5)
 	y_one = y_one.fit_transform(np.reshape(y, (len(y), 1))).toarray()
 
