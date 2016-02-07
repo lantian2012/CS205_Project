@@ -18,7 +18,7 @@ Configuration files reside in the `config` folder. `defualt.yaml`, `binary.yaml`
 
 ### 4. Prediction
 
-'post_process.py' uses the model produced by training to make prediction on the test set. `post process.slurm` should be used to make prediction using GPU.
+`post_process.py` uses the model produced by training to make prediction on the test set. `post process.slurm` should be used to make prediction using GPU.
 
 ### 5. Miscellaneous
 
